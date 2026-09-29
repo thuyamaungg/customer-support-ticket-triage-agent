@@ -60,7 +60,6 @@ Walk-in tickets are never auto-sent, whatever the policy: the customer is standi
 
 Providers retire models on their own schedule. If the triage log shows a `404` for a model id, replace it in `TRIAGE_MODEL` or `TRIAGE_FALLBACK_MODELS`.
 
-<!-- CONFIRM: run `python try_triage.py` before publishing and update the defaults in app/config.py if any id 404s. -->
 
 Quick check that your provider, key and model all work:
 
