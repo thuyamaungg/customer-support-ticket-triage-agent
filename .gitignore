@@ -1,0 +1,25 @@
+# Secrets
+.env
+
+# Local tooling
+.claude/
+
+# Generated — recreate with: python seed_demo.py --offline
+*.db
+
+# Downloaded binaries
+ngrok.exe
+ngrok
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

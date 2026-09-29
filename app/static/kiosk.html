@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="my">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{STORE_NAME}}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Myanmar:wght@400;600&family=Noto+Sans+Thai:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Dark glass palette: deep navy ground, jade and gold glows, frosted panels. */
+  :root {
+    --bg-deep: #0B1120;
+    --jade: #2DD4A7;
+    --jade-deep: #1FB894;
+    --gold: #E8B04B;
+    --violet: #7C6CF0;
+
+    --glass-fill: rgba(255, 255, 255, 0.07);
+    --glass-fill-strong: rgba(255, 255, 255, 0.11);
+    --glass-border: rgba(255, 255, 255, 0.16);
+    --glass-border-strong: rgba(255, 255, 255, 0.28);
+
+    --text-primary: #F5F3EE;
+    --text-secondary: rgba(245, 243, 238, 0.62);
+    --text-tertiary: rgba(245, 243, 238, 0.4);
+
+    --alert: #FFB8A0;
+    --radius-lg: 28px;
+    --radius-md: 20px;
+    --radius-sm: 14px;
+    --font: "Noto Sans Myanmar", "Inter", "Noto Sans Thai", "Myanmar Text", "Padauk",
+            "Leelawadee UI", Tahoma, system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; min-height: 100%; }
+  body {
+    background-color: var(--bg-deep);
+    color: var(--text-primary);
+    font-family: var(--font);
+    font-size: clamp(17px, 2.2vw, 20px);
+    line-height: 1.5;
+  }
+  /* blurred jade and gold glows behind everything */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 12% 8%, rgba(45, 212, 167, 0.42) 0, transparent 45%),
+      radial-gradient(circle at 92% 95%, rgba(232, 176, 75, 0.36) 0, transparent 42%);
+  }
+  :lang(my) { line-height: 1.9; }
+
+  .kiosk {
+    position: relative;
+    z-index: 1;
+    max-width: 40rem;
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: clamp(1.25rem, 4vw, 3rem);
+    display: flex;
+    flex-direction: column;
+    gap: 2.25rem;
+  }
+
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .store { margin: 0; font-weight: 600; color: var(--gold); }
+  .langs {
+    display: flex;
+    padding: 3px;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid var(--glass-border);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .langs button {
+    font: inherit;
+    font-size: 0.9em;
+    line-height: 1.4;
+    min-height: 44px;
+    padding: 0.4rem 1rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .langs button[aria-pressed="true"] { background: var(--text-primary); color: var(--bg-deep); font-weight: 600; }
+
+  /* frosted panel around the form */
+  #form-view {
+    padding: clamp(1.25rem, 4vw, 2rem);
+    background: var(--glass-fill);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    backdrop-filter: blur(24px) saturate(140%);
+    -webkit-backdrop-filter: blur(24px) saturate(140%);
+  }
+
+  h1 {
+    margin: 0 0 0.5rem;
+    font-size: clamp(2.2rem, 6vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.15;
+  }
+  :lang(my) h1 { line-height: 1.55; }
+  .lead { margin: 0 0 1.5rem; max-width: 34em; color: var(--text-secondary); }
+
+  form { display: flex; flex-direction: column; gap: 0.4rem; }
+  label { margin-top: 0.9rem; font-weight: 600; }
+  input, textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    font: inherit;
+    color: var(--text-primary);
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+  }
+  textarea { min-height: 7.5rem; resize: vertical; }
+  input::placeholder, textarea::placeholder { color: var(--text-tertiary); }
+  input:focus-visible, textarea:focus-visible, button:focus-visible {
+    outline: 2px solid var(--jade);
+    outline-offset: 2px;
+  }
+
+  .primary {
+    margin-top: 1.4rem;
+    min-height: 62px;
+    padding: 1rem 1.25rem;
+    font: inherit;
+    font-size: 1.1em;
+    font-weight: 700;
+    color: #06251d;
+    background: linear-gradient(135deg, var(--jade), var(--jade-deep));
+    border: 0;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+  .primary:active { transform: scale(0.98); }
+  .primary:disabled { opacity: 0.4; cursor: wait; }
+  .error { margin: 0.75rem 0 0; color: var(--alert); }
+
+  /* ---------- result ---------- */
+  #result-view { display: flex; flex-direction: column; align-items: stretch; gap: 2rem; }
+  .slip {
+    position: relative;
+    padding: 2rem 1.75rem 2.25rem;
+    background: var(--glass-fill-strong);
+    border: 1px solid var(--glass-border-strong);
+    border-radius: var(--radius-lg);
+    backdrop-filter: blur(24px) saturate(140%);
+    -webkit-backdrop-filter: blur(24px) saturate(140%);
+    color: var(--text-primary);
+    text-align: center;
+  }
+  .slip-label { margin: 0; font-weight: 600; color: var(--text-secondary); }
+  .slip-number {
+    margin: 0.2rem 0 0.4rem;
+    font-size: clamp(5rem, 24vw, 9.5rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+    color: var(--jade);
+  }
+  .slip-full { margin: 0 0 1.5rem; color: var(--text-tertiary); letter-spacing: 0.03em; }
+  .slip-msg {
+    margin: 0;
+    padding-top: 1.25rem;
+    border-top: 1px dashed var(--glass-border-strong);
+    text-align: left;
+  }
+  .secondary {
+    align-self: center;
+    min-height: 52px;
+    padding: 0.75rem 1.5rem;
+    font: inherit;
+    color: var(--text-primary);
+    background: var(--glass-fill);
+    border: 1px solid var(--glass-border);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+  .secondary:hover { background: var(--glass-fill-strong); border-color: var(--glass-border-strong); }
+  .countdown { margin: -1rem 0 0; text-align: center; font-size: 0.9em; color: var(--text-secondary); }
+
+  /* The one animated moment: the ticket card fades in when a ticket is issued. */
+  @media (prefers-reduced-motion: no-preference) {
+    .slip.printing { animation: print 0.7s cubic-bezier(0.2, 0.7, 0.2, 1); }
+    @keyframes print {
+      from { clip-path: inset(0 0 100% 0); transform: translateY(-10px); }
+      to   { clip-path: inset(0 0 -12px 0); transform: none; }
+    }
+  }
+</style>
+</head>
+<body>
+<main class="kiosk">
+  <header class="top">
+    <p class="store">{{STORE_NAME}}</p>
+    <div class="langs" role="group" aria-label="Language">
+      <button type="button" data-lang="my" lang="my">မြန်မာ</button>
+      <button type="button" data-lang="th" lang="th">ไทย</button>
+      <button type="button" data-lang="en" lang="en">English</button>
+    </div>
+  </header>
+
+  <section id="form-view">
+    <h1 data-i18n="title"></h1>
+    <p class="lead" data-i18n="lead"></p>
+    <form id="ticket-form" novalidate>
+      <label for="name" data-i18n="nameLabel"></label>
+      <input id="name" name="name" maxlength="120" autocomplete="off" required>
+      <label for="need" data-i18n="needLabel"></label>
+      <textarea id="need" name="need" maxlength="2000" required></textarea>
+      <p id="error" class="error" role="alert" hidden></p>
+      <button type="submit" class="primary" id="submit" data-i18n="submit"></button>
+    </form>
+  </section>
+
+  <section id="result-view" hidden aria-live="polite">
+    <div class="slip" id="slip">
+      <p class="slip-label" data-i18n="yourNumber"></p>
+      <p class="slip-number" id="short-number"></p>
+      <p class="slip-full" id="full-number"></p>
+      <p class="slip-msg" id="receipt"></p>
+    </div>
+    <button type="button" class="secondary" id="restart" data-i18n="restart"></button>
+    <p class="countdown" id="countdown"></p>
+  </section>
+</main>
+
+<script>
+  // UI text. The Burmese and Thai wording is a first draft: adjust it to how your customers talk.
+  const TEXT = {
+    my: {
+      title: "မင်္ဂလာပါ",
+      lead: "အမည်နဲ့ ဝန်ဆောင်မှုကို ရေးပြီး လက်မှတ်နံပါတ်ယူပါ။",
+      nameLabel: "အမည်",
+      needLabel: "လိုအပ်သည့် ဝန်ဆောင်မှု",
+      needPlaceholder: "ဥပမာ – လက်ပ်တော့ ဖွင့်မရဘူး",
+      submit: "လက်မှတ်နံပါတ် ယူမယ်",
+      sending: "လက်မှတ် ထုတ်နေပါတယ်…",
+      yourNumber: "သင့်လက်မှတ်နံပါတ်",
+      restart: "နောက်တစ်ခု",
+      countdown: "{s} စက္ကန့်အနည်းငယ်အတွင်း စာမျက်နှာအသစ် ပေါ်လာမယ်",
+      errMissing: "အမည်နဲ့ လိုအပ်သောဝန်ဆောင်မှု နှစ်ခုလုံး ဖြည့်ပြီး နှိပ်ပါ။",
+      errBusy: "တောင်းဆိုမှု များနေသည့်အတွက် မိနစ်အနည်းငယ်စောင့်ပြီး ပြန်လုပ်ကြည့်ပါ။",
+      errGeneric: "လက်မှတ်မထုတ်ပေးနိုင်ပါသဖြင့် ကောင်တာက ဝန်ထမ်းကို မေးပါ။",
+    },
+    th: {
+      title: "ยินดีต้อนรับ",
+      lead: "กรอกชื่อและสิ่งที่ต้องการ เพื่อรับหมายเลขทิกเก็ต",
+      nameLabel: "ชื่อ",
+      needLabel: "ต้องการให้ช่วยเรื่องอะไร",
+      needPlaceholder: "เช่น โน้ตบุ๊กเปิดไม่ติด",
+      submit: "รับหมายเลขทิกเก็ต",
+      sending: "กำลังออกหมายเลข…",
+      yourNumber: "หมายเลขทิกเก็ตของคุณ",
+      restart: "เริ่มใหม่",
+      countdown: "หน้าจอจะเริ่มใหม่ใน {s} วินาที",
+      errMissing: "กรอกชื่อและสิ่งที่ต้องการ แล้วกดปุ่มอีกครั้ง",
+      errBusy: "มีคำขอมากเกินไป กรุณารอหนึ่งนาทีแล้วลองใหม่",
+      errGeneric: "ออกหมายเลขไม่สำเร็จ กรุณาติดต่อพนักงานที่เคาน์เตอร์",
+    },
+    en: {
+      title: "Welcome",
+      lead: "Write your name and what you need to get a ticket number.",
+      nameLabel: "Your name",
+      needLabel: "What do you need help with?",
+      needPlaceholder: "For example: my laptop won't turn on",
+      submit: "Get my ticket number",
+      sending: "Getting your number…",
+      yourNumber: "Your ticket number",
+      restart: "Start over",
+      countdown: "This screen clears in {s} seconds",
+      errMissing: "Enter your name and what you need, then tap the button again.",
+      errBusy: "Too many requests right now. Wait a minute and try again.",
+      errGeneric: "The ticket couldn't be created. Please ask a staff member at the counter.",
+    },
+  };
+
+  const RESET_AFTER_SECONDS = 45;
+  const $ = (id) => document.getElementById(id);
+
+  let lang = "my";
+  let formToken = newToken();
+  let sending = false;
+  let timer = null;
+  let secondsLeft = 0;
+
+  // One random token per fresh form. Retries reuse it, so the server returns the same ticket.
+  // crypto.randomUUID only exists on https/localhost; the fallback works on a plain LAN address.
+  function newToken() {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    const bytes = crypto.getRandomValues(new Uint8Array(16));
+    return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
+  }
+
+  function t(key) { return TEXT[lang][key]; }
+
+  function applyLanguage() {
+    document.documentElement.lang = lang;
+    document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.dataset.i18n); });
+    $("need").placeholder = t("needPlaceholder");
+    document.querySelectorAll(".langs button").forEach((b) => {
+      b.setAttribute("aria-pressed", String(b.dataset.lang === lang));
+    });
+    if (sending) $("submit").textContent = t("sending");
+    if (!$("error").hidden && $("error").dataset.key) $("error").textContent = t($("error").dataset.key);
+    renderCountdown();
+  }
+
+  function showError(key) {
+    const el = $("error");
+    el.dataset.key = key;
+    el.textContent = t(key);
+    el.hidden = false;
+  }
+
+  function clearError() {
+    $("error").hidden = true;
+    $("error").dataset.key = "";
+  }
+
+  function setSending(on) {
+    sending = on;
+    $("submit").disabled = on;
+    $("submit").textContent = t(on ? "sending" : "submit");
+  }
+
+  async function submitForm(event) {
+    event.preventDefault();
+    if (sending) return;
+    const name = $("name").value.trim();
+    const need = $("need").value.trim();
+    if (!name || !need) { showError("errMissing"); return; }
+
+    clearError();
+    setSending(true);
+    try {
+      const response = await fetch("/webhook/walkin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, need, form_token: formToken, lang }),
+      });
+      if (response.ok) { showResult(await response.json()); return; }
+      showError(response.status === 422 ? "errMissing" : response.status === 429 ? "errBusy" : "errGeneric");
+    } catch (err) {
+      showError("errGeneric");
+    } finally {
+      setSending(false);
+    }
+  }
+
+  function showResult(data) {
+    $("short-number").textContent = data.short_number;
+    $("full-number").textContent = data.ticket_number;
+    $("receipt").textContent = data.receipt;
+    $("receipt").lang = data.language;
+    $("form-view").hidden = true;
+    $("result-view").hidden = false;
+
+    const slip = $("slip");
+    slip.classList.remove("printing");
+    void slip.offsetWidth; // restart the animation
+    slip.classList.add("printing");
+
+    $("restart").focus();
+    startCountdown();
+  }
+
+  function startCountdown() {
+    clearInterval(timer);
+    secondsLeft = RESET_AFTER_SECONDS;
+    renderCountdown();
+    timer = setInterval(() => {
+      secondsLeft -= 1;
+      if (secondsLeft <= 0) resetForm(); else renderCountdown();
+    }, 1000);
+  }
+
+  function renderCountdown() {
+    if ($("result-view").hidden) return;
+    $("countdown").textContent = t("countdown").replace("{s}", secondsLeft);
+  }
+
+  function resetForm() {
+    clearInterval(timer);
+    $("ticket-form").reset();
+    clearError();
+    formToken = newToken();
+    $("result-view").hidden = true;
+    $("form-view").hidden = false;
+    $("name").focus();
+  }
+
+  document.querySelectorAll(".langs button").forEach((b) => {
+    b.addEventListener("click", () => { lang = b.dataset.lang; applyLanguage(); });
+  });
+  $("ticket-form").addEventListener("submit", submitForm);
+  $("restart").addEventListener("click", resetForm);
+  applyLanguage();
+</script>
+</body>
+</html>
