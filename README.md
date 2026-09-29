@@ -168,7 +168,7 @@ An early draft reply told a customer "our team has been notified" when nothing h
 ## Quick start
 
 ```
-git clone https://github.com/inkychalk/customer-support-ticket-triage-agent.git
+git clone https://github.com/thuyamaungg/customer-support-ticket-triage-agent.git
 cd customer-support-ticket-triage-agent
 python -m venv .venv
 .venv\Scripts\activate
@@ -254,7 +254,7 @@ Worth knowing what's covered: ticket-number allocation under 50 concurrent threa
 
 Built by **Thura** — a network engineer moving into AI development.
 
-[GitHub](https://github.com/inkychalk)
+[GitHub](https://github.com/thuyamaungg)
 
 ## License
 
