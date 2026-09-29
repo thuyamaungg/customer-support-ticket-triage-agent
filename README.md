@@ -167,7 +167,6 @@ An early draft reply told a customer "our team has been notified" when nothing h
 
 ## Quick start
 
-<!-- CONFIRM: replace with the real repository URL once created -->
 ```
 git clone https://github.com/inkychalk/customer-support-ticket-triage-agent.git
 cd customer-support-ticket-triage-agent
